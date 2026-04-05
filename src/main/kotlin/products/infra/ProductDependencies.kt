@@ -13,6 +13,7 @@ fun Application.initProductsModule() {
     productRoutes(
         createProduct = CreateProduct(repository, imageStorage),
         getProducts = GetProducts(repository),
+        getProductById = GetProductById(repository),
         getMyProducts = GetMyProducts(repository),
         updateProduct = UpdateProduct(repository, imageStorage),
         deleteProduct = DeleteProduct(repository)

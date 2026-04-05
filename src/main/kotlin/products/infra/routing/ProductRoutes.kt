@@ -13,6 +13,7 @@ import org.example.products.app.*
 fun Application.productRoutes(
     createProduct: CreateProduct,
     getProducts: GetProducts,
+    getProductById: GetProductById,
     getMyProducts: GetMyProducts,
     updateProduct: UpdateProduct,
     deleteProduct: DeleteProduct
@@ -26,6 +27,21 @@ fun Application.productRoutes(
                 val categoryId = call.request.queryParameters["category"]?.toIntOrNull()
                 val regionId = call.request.queryParameters["region"]?.toIntOrNull()
                 call.respond(getProducts.execute(search, categoryId, regionId))
+            }
+
+            get("/{id}") {
+                val productId = call.parameters["id"]?.toIntOrNull()
+                if (productId == null) {
+                    call.respond(HttpStatusCode.BadRequest, mapOf("error" to "ID inválido"))
+                    return@get
+                }
+
+                val product = getProductById.execute(productId)
+                if (product != null) {
+                    call.respond(HttpStatusCode.OK, product)
+                } else {
+                    call.respond(HttpStatusCode.NotFound, mapOf("error" to "Producto no encontrado"))
+                }
             }
 
             // RUTAS PROTEGIDAS
